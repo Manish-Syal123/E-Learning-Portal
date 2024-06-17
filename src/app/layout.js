@@ -1,9 +1,7 @@
-import { Inter } from "next/font/google";
+import { Inter, Outfit, Nunito } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import Nav from "@/components/Nav";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -13,18 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          // defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* <Nav /> */}
-          {children}
-        </ThemeProvider>
-      </body>
+      <body className={nunito.className}>{children}</body>
     </html>
   );
 }
