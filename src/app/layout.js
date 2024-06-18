@@ -1,7 +1,7 @@
 import { Inter, Outfit, Nunito } from "next/font/google";
 import "./globals.css";
 
-const nunito = Nunito({ subsets: ["latin"] });
+const nunito = Outfit({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
