@@ -10,6 +10,18 @@ export const getAllCourses = async () => {
       return res;
     }
   } catch (error) {
-    console.log(" Error in Fetch Course List : ", error);
+    console.log(" Error while Fetching Course List : ", error);
+  }
+};
+
+//Get SideBanners
+export const getSideBanners = async () => {
+  try {
+    const res = await GlobalApi.getSideBanner();
+    if (res && res?.sideBanners && res?.sideBanners?.length > 0) {
+      return res;
+    }
+  } catch (error) {
+    console.log(" Error while Fetching SideBanners : ", error);
   }
 };

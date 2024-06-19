@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import CourseItem from "./CourseItem";
 import { Rabbit } from "lucide-react";
+import Link from "next/link";
 
 const CourseList = () => {
   const [courseList, setCourseList] = useState([]);
@@ -61,9 +62,11 @@ const CourseList = () => {
           ))
         ) : courseList.length > 0 ? (
           courseList.map((item, index) => (
-            <div key={index}>
-              <CourseItem course={item} />
-            </div>
+            <Link href={"/course-preview/" + item.slug} key={index}>
+              <div>
+                <CourseItem course={item} />
+              </div>
+            </Link>
           ))
         ) : (
           <div className="flex flex-col items-center justify-center mt-10 lg:ml-80 w-full h-full">
