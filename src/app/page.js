@@ -1,5 +1,25 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+"use client";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
+import { useEffect } from "react";
+
 export default function Home() {
-  return <Button>Home page</Button>;
+  const router = useRouter();
+  const { user, isLoaded } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    } else if (isLoaded) {
+      isLoaded && router.push("/courses");
+    }
+  }, [user]);
+
+  return (
+    <div>
+      <h2>Welcome to Manish EdTech Academy</h2>
+      <UserButton />
+    </div>
+  );
 }
