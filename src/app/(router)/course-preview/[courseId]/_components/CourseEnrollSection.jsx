@@ -4,9 +4,9 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import React from "react";
+import React, { useEffect } from "react";
 
-const CourseEnrollSection = ({ courseInfo }) => {
+const CourseEnrollSection = ({ courseInfo, isUserAlreadyEnrolled }) => {
   const membership = false;
   const { user } = useUser();
   const router = useRouter();
@@ -33,7 +33,7 @@ const CourseEnrollSection = ({ courseInfo }) => {
     <div className="p-3 text-center rounded-sm bg-primary">
       <h2 className="text-[20px] font-bold text-white">Enroll to the Course</h2>
       {/* User have (Membership || is free course) and Already loggedIn*/}
-      {user && (membership || courseInfo.free) ? (
+      {user && (membership || courseInfo.free) && !isUserAlreadyEnrolled ? (
         <div className=" flex flex-col gap-3 mt-3">
           <h2 className="text-white font-light">
             Enroll Now to Start Learning and Building the Project!
@@ -57,16 +57,31 @@ const CourseEnrollSection = ({ courseInfo }) => {
           </Link>
         </div>
       ) : (
-        <div className=" flex flex-col gap-3 mt-3">
-          <h2 className="text-white font-light">
-            Buy Monthly Membership and get access to All Courses
-          </h2>
-          <Button className="bg-white text-primary hover:bg-white hover:text-primary text-wrap">
-            Buy Membership Just $2.99
-          </Button>
-        </div>
+        !isUserAlreadyEnrolled && (
+          <div className=" flex flex-col gap-3 mt-3">
+            <h2 className="text-white font-light">
+              Buy Monthly Membership and get access to All Courses
+            </h2>
+            <Button className="bg-white text-primary hover:bg-white hover:text-primary text-wrap">
+              Buy Membership Just $2.99
+            </Button>
+          </div>
+        )
       )}
       {/*User Doesn't have Membership or Not Signup/Login yet */}
+
+      {isUserAlreadyEnrolled && (
+        <div className=" flex flex-col gap-3 mt-3">
+          <h2 className="text-white font-light">
+            Continue to Learn your Project
+          </h2>
+          <Link href={"/watch-course/" + isUserAlreadyEnrolled}>
+            <Button className="bg-white text-primary hover:bg-white hover:text-primary text-wrap">
+              Continue
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
