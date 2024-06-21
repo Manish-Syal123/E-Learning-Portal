@@ -26,7 +26,7 @@ const CoursePreview = ({ params }) => {
         </div>
         {/* Course Content like chapters and Enrolment section on right side */}
         <div>
-          <CourseEnrollSection />
+          <CourseEnrollSection courseInfo={courseInfo} />
           <CourseContentSection courseInfo={courseInfo} />
         </div>
       </div>
