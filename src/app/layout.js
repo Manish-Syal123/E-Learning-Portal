@@ -1,12 +1,6 @@
 import { Inter, Outfit, Nunito } from "next/font/google";
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const nunito = Outfit({ subsets: ["latin"] });
 

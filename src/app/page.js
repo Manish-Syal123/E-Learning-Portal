@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } else if (isLoaded) {
       isLoaded && router.push("/courses");
     }

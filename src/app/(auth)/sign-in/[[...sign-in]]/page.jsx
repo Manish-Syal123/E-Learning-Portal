@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <section class="bg-white">
       <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <section class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
+        <section class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6 rounded-tr-2xl rounded-br-2xl">
           <img
             alt=""
             src="/signin.svg"
