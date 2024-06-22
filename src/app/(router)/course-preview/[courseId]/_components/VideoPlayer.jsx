@@ -7,6 +7,7 @@ const VideoPlayer = ({ videoUrl, poster }) => {
       height={250}
       controls
       poster={poster}
+      key={videoUrl}
       className="rounded-sm"
     >
       <source src={videoUrl} type="video/mp4" />
