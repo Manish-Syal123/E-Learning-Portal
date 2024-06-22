@@ -6,8 +6,15 @@ const CourseContentSection = ({
   isUserAlreadyEnrolled,
   watchMode = false,
   setActiveChapterIndex,
+  completedChapter,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // use to check whether the chapter is completed or not
+  const checkIsChapterCompleted = (chapterId) => {
+    return completedChapter.find((item) => item.chapterId == chapterId);
+  };
+
   return (
     <div className="p-3 bg-white rounded-sm mt-3">
       <h2>Content/Chapters</h2>
@@ -19,6 +26,11 @@ const CourseContentSection = ({
             hover:bg-gray-200 hover:text-gray-500
             ${activeIndex == index && "bg-primary text-white"}
             ${isUserAlreadyEnrolled && "hover:bg-primary hover:text-white"}
+            ${
+              watchMode &&
+              checkIsChapterCompleted(item.id) &&
+              "border-green-800 bg-green-400"
+            }
             `}
             onClick={() => {
               watchMode && setActiveChapterIndex(index);

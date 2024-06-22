@@ -156,8 +156,15 @@ const getUserEnrolledCourseDetails = async (id, userEmail) => {
         }
       ) {
         courseId
-        userEmail
         id
+        userEmail
+        completedChapter {
+          ... on CompletedChapter {
+          id
+          chapterId
+        }
+      }
+        
         courseList {
           author
           banner {
@@ -190,6 +197,35 @@ const getUserEnrolledCourseDetails = async (id, userEmail) => {
   return result;
 };
 
+const markChapterCompleted = async (enrollId, chapterId) => {
+  const query =
+    gql`
+    mutation MyMutation {
+      updateUserEnrollCourse(
+        data: {
+          completedChapter: {
+            create: { CompletedChapter: { data: { chapterId: "` +
+    chapterId +
+    `" } } }
+          }
+        }
+        where: { id: "` +
+    enrollId +
+    `" }
+      ){
+        id
+      }
+      publishUserEnrollCourse(where: { id: "` +
+    enrollId +
+    `" }) {
+        id
+      }
+    }
+  `;
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
 export default {
   getAllCourseList,
   getSideBanner,
@@ -197,4 +233,5 @@ export default {
   enrollToCourse,
   checkUserEnrolledToCourse,
   getUserEnrolledCourseDetails,
+  markChapterCompleted,
 };

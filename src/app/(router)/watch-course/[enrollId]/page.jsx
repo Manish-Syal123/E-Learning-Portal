@@ -4,11 +4,12 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import CourseVideoDescription from "../../course-preview/[courseId]/_components/CourseVideoDescription";
 import CourseContentSection from "../../course-preview/[courseId]/_components/CourseContentSection";
+import { toast } from "sonner";
 
 const WatchCourse = ({ params }) => {
   const [courseInfo, setCourseInfo] = useState([]);
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
-
+  const [completedChapter, setCompletedChapter] = useState([]);
   const { user } = useUser();
   useEffect(() => {
     if (params && user) {
@@ -23,7 +24,7 @@ const WatchCourse = ({ params }) => {
         params.enrollId,
         user?.primaryEmailAddress?.emailAddress
       ).then((res) => {
-        // console.log(res);
+        setCompletedChapter(res.userEnrollCourses[0].completedChapter); // storing the list of chapters which has been completed
         setCourseInfo(res.userEnrollCourses[0].courseList || []);
       });
     } catch (error) {
@@ -33,6 +34,19 @@ const WatchCourse = ({ params }) => {
       );
     }
   };
+
+  // this will Save the Completed Chapter Id
+  const onChapterComplete = (chapterId) => {
+    GlobalApi.markChapterCompleted(params.enrollId, chapterId).then((res) => {
+      console.log(res);
+
+      if (res) {
+        toast("Chapter Marked as Completed!");
+        getUserEnrolledCourseDetails(); //now it will fetch the latest data and to update the frontend UI information based on updated fetched data
+      }
+    });
+  };
+
   return (
     courseInfo.name && (
       <div>
@@ -43,6 +57,7 @@ const WatchCourse = ({ params }) => {
               courseInfo={courseInfo}
               activeChapterIndex={activeChapterIndex}
               watchMode={true}
+              setChapterCompleted={(chapterId) => onChapterComplete(chapterId)}
             />
           </div>
           {/* Course Content like chapters section on right side */}
@@ -52,6 +67,7 @@ const WatchCourse = ({ params }) => {
               isUserAlreadyEnrolled={true}
               watchMode={true}
               setActiveChapterIndex={(index) => setActiveChapterIndex(index)}
+              completedChapter={completedChapter}
             />
           </div>
         </div>
