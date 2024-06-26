@@ -4,11 +4,12 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { UserMemberContext } from "@/app/_context/UserMemberContext";
 
 const CourseEnrollSection = ({ courseInfo, isUserAlreadyEnrolled }) => {
-  const membership = false;
   const { user } = useUser();
+  const { isMember, setIsMember } = useContext(UserMemberContext);
   const router = useRouter();
 
   // Postting user enroll details to the backend
@@ -33,7 +34,7 @@ const CourseEnrollSection = ({ courseInfo, isUserAlreadyEnrolled }) => {
     <div className="p-3 text-center rounded-sm bg-primary">
       <h2 className="text-[20px] font-bold text-white">Enroll to the Course</h2>
       {/* User have (Membership || is free course) and Already loggedIn*/}
-      {user && (membership || courseInfo.free) && !isUserAlreadyEnrolled ? (
+      {user && (isMember || courseInfo.free) && !isUserAlreadyEnrolled ? (
         <div className=" flex flex-col gap-3 mt-3">
           <h2 className="text-white font-light">
             Enroll Now to Start Learning and Building the Project!

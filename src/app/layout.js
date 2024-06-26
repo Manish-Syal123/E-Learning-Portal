@@ -3,6 +3,8 @@ import { Inter, Outfit, Nunito } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { UserMemberContext } from "./_context/UserMemberContext";
+import { useState } from "react";
 
 const nunito = Outfit({ subsets: ["latin"] });
 
@@ -12,14 +14,17 @@ const nunito = Outfit({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({ children }) {
+  const [isMember, setIsMember] = useState(false);
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={nunito.className}>
-          {children}
-          <Toaster richColors />
-        </body>
-      </html>
+      <UserMemberContext.Provider value={{ isMember, setIsMember }}>
+        <html lang="en">
+          <body className={nunito.className}>
+            {children}
+            <Toaster richColors />
+          </body>
+        </html>
+      </UserMemberContext.Provider>
     </ClerkProvider>
   );
 }

@@ -1,13 +1,21 @@
 "use client";
+import { UserMemberContext } from "@/app/_context/UserMemberContext";
+import GlobalApi from "@/app/_utils/GlobalApi";
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
+import { Loader } from "lucide-react";
 import Script from "next/script";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { toast } from "sonner";
 
 const Membership = () => {
   const [subscriptionId, setSubscriptionId] = useState(null);
-
+  const [loading, setLoading] = useState(false);
+  const { user } = useUser();
+  const { isMember, setIsMember } = useContext(UserMemberContext);
   // to create Subscription Id
   const createSubscription = async (planId) => {
+    setLoading(true);
     await axios
       .post(
         "/api/create-subscription",
@@ -19,6 +27,7 @@ const Membership = () => {
         console.log(resp);
         setSubscriptionId(resp.data.id);
         makePayment();
+        setLoading(false);
       })
       .catch((err) => {
         console.log("Error occured while creating subscription ID: ", err);
@@ -29,10 +38,14 @@ const Membership = () => {
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_LIVE_KEY,
       subscription_id: subscriptionId,
-      name: "Manish EdTech Academy",
+      name: "Manish-EdTech Academy",
       description: "ManishEdTech Membership",
+      image: "/logoIcon-remove_bg.png",
       handler: async (resp) => {
         console.log(resp);
+        if (resp) {
+          addNewMember(resp?.razorpay_payment_id);
+        }
       },
       theme: {
         color: "#7D41E1",
@@ -41,6 +54,24 @@ const Membership = () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+  };
+
+  const addNewMember = (paymentId) => {
+    GlobalApi.addNewMember(
+      user?.primaryEmailAddress?.emailAddress,
+      paymentId
+    ).then(
+      (resp) => {
+        console.log(resp);
+
+        if (resp) {
+          toast("✅Payment Successfull!!");
+        }
+      },
+      (error) => {
+        toast("Some error Occured");
+      }
+    );
   };
   return (
     <>
@@ -186,7 +217,6 @@ const Membership = () => {
               <span className="text-gray-700"> Community access </span>
             </li> */}
             </ul>
-
             <a
               onClick={() =>
                 createSubscription(
@@ -195,7 +225,7 @@ const Membership = () => {
               }
               className="mt-8 block rounded-full border border-indigo-600 bg-indigo-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-indigo-700 hover:ring-1 hover:ring-indigo-700 focus:outline-none focus:ring active:text-indigo-500"
             >
-              Get Started
+              {loading ? <Loader className="animate-spin" /> : "Get Started"}
             </a>
           </div>
 
@@ -300,17 +330,25 @@ const Membership = () => {
               </li>
             </ul>
 
-            <a
-              // href="#"
-              onClick={() =>
-                createSubscription(
-                  process.env.NEXT_PUBLIC_RAZORPAY_MONTHLY_PLAN_KEY
-                )
-              }
-              className="mt-8 block rounded-full border border-indigo-600 bg-indigo-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-indigo-700 hover:ring-1 hover:ring-indigo-700 focus:outline-none focus:ring active:text-indigo-500"
-            >
-              Get Started
-            </a>
+            {isMember ? (
+              <a
+                onClick={() => toast("🚀 You are Already a Member!! ⚡")}
+                className="mt-8 block rounded-full border border-indigo-600 bg-white px-12 py-3 text-center text-sm font-bold text-primary hover:ring-1 hover:ring-indigo-700 focus:outline-none focus:ring"
+              >
+                You'r already a Member
+              </a>
+            ) : (
+              <a
+                onClick={() =>
+                  createSubscription(
+                    process.env.NEXT_PUBLIC_RAZORPAY_MONTHLY_PLAN_KEY
+                  )
+                }
+                className="mt-8 block rounded-full border border-indigo-600 bg-indigo-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-indigo-700 hover:ring-1 hover:ring-indigo-700 focus:outline-none focus:ring active:text-indigo-500"
+              >
+                {loading ? <Loader className="animate-spin" /> : "Get Started"}
+              </a>
+            )}
           </div>
         </div>
         <h2 className="flex items-center justify-center mt-10 font-bold text-[15px]">

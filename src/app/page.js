@@ -3,6 +3,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
+import GlobalApi from "./_utils/GlobalApi";
 
 export default function Home() {
   const router = useRouter();
