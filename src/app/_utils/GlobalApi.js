@@ -306,6 +306,28 @@ const checkForMembership = async (email) => {
   const result = await request(MASTER_URL, query);
   return result;
 };
+
+const SubscribeToNewsletter = async (email, firstName) => {
+  const query =
+    gql`
+  mutation MyMutation {
+  createUserInfo(data: {email: "` +
+    email +
+    `", name: "` +
+    firstName +
+    `", hasSuscribedToNewsLetter: true}) {
+    id
+    email
+  }
+  publishManyUserInfos(to: PUBLISHED) {
+    count
+  }
+}
+`;
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
 export default {
   getAllCourseList,
   getSideBanner,
@@ -317,4 +339,5 @@ export default {
   getUserAllEnrolledCourseList,
   addNewMember,
   checkForMembership,
+  SubscribeToNewsletter,
 };
