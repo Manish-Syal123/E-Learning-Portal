@@ -7,7 +7,7 @@ export default function Page() {
       <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
         <aside class="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
           <Image
-            alt=""
+            alt="signup"
             src="/signup.svg"
             width={600}
             height={1000}

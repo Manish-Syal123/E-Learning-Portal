@@ -315,7 +315,7 @@ const SubscribeToNewsletter = async (email, firstName) => {
     email +
     `", name: "` +
     firstName +
-    `", hasSuscribedToNewsLetter: true}) {
+    `", hasSuscribedToNewsLetter: false}) {
     id
     email
   }
@@ -324,6 +324,64 @@ const SubscribeToNewsletter = async (email, firstName) => {
   }
 }
 `;
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
+const getNewsLetters = async () => {
+  const query = gql`
+    query MyQuery {
+      newsLetters {
+        id
+        createdAt
+        title
+        descriptionHeading
+        description
+        image {
+          url
+        }
+      }
+    }
+  `;
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
+const getUpdatedUserInformation = async (email) => {
+  const query =
+    gql`
+  query getUpdatedUserInfo {
+  userInfos(where: {email: "` +
+    email +
+    `"}) {
+    id
+    hasSuscribedToNewsLetter
+  }
+}
+`;
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
+const updateUserSunscriptionRole = async (email, subscribe) => {
+  const query =
+    gql`
+  mutation updateUserInformation {
+  updateUserInfo(
+    data: {hasSuscribedToNewsLetter: ${subscribe}}
+    where: {email: "codechunk94@gmail.com"}
+  ) {
+    email
+    id
+  }
+  publishUserInfo(where: {email: "` +
+    email +
+    `"}) {
+    id
+  }
+}
+`;
+
   const result = await request(MASTER_URL, query);
   return result;
 };
@@ -340,4 +398,7 @@ export default {
   addNewMember,
   checkForMembership,
   SubscribeToNewsletter,
+  getNewsLetters,
+  getUpdatedUserInformation,
+  updateUserSunscriptionRole,
 };

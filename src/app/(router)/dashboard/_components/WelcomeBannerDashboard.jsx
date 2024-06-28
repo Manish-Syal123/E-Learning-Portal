@@ -4,7 +4,12 @@ import React from "react";
 const WelcomeBannerDashboard = ({ user }) => {
   return (
     <div className="bg-purple-200 rounded-md p-5 flex gap-5 items-center">
-      <Image src={"/pandadashboard.png"} width={150} height={150} />
+      <Image
+        src={"/pandadashboard.png"}
+        alt="pandaImage"
+        width={150}
+        height={150}
+      />
       <div>
         <h2 className="text-[32px] font-light">
           Welcome,
