@@ -1,12 +1,15 @@
 "use client";
+import { UserMemberContext } from "@/app/_context/UserMemberContext";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { BellDot, Search } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
+  const { search, setSearch } = useContext(UserMemberContext);
+
   return (
     <div className="p-4 bg-white flex justify-between">
       {/* Search Bar */}
@@ -14,8 +17,9 @@ const Header = () => {
         <Search className="h-5 w-5" />
         <input
           type="text"
-          placeholder="Search here......"
+          placeholder="Search for courses......"
           className="outline-none"
+          onChange={(event) => setSearch(event.target.value)}
         />
       </div>
       {/* Get Started button and bell icon */}

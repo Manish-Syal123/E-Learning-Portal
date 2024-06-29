@@ -15,9 +15,12 @@ const nunito = Outfit({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const [isMember, setIsMember] = useState(false);
+  const [search, setSearch] = useState("");
   return (
     <ClerkProvider>
-      <UserMemberContext.Provider value={{ isMember, setIsMember }}>
+      <UserMemberContext.Provider
+        value={{ isMember, setIsMember, search, setSearch }}
+      >
         <html lang="en">
           <body className={nunito.className}>
             {children}

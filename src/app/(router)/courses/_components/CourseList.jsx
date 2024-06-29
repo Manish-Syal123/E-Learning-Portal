@@ -1,5 +1,5 @@
 import { getAllCourses } from "@/actions";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -10,21 +10,40 @@ import {
 import CourseItem from "./CourseItem";
 import { Rabbit } from "lucide-react";
 import Link from "next/link";
+import { UserMemberContext } from "@/app/_context/UserMemberContext";
 
 const CourseList = () => {
   const [courseList, setCourseList] = useState([]);
+  const [allCourses, setAllCourses] = useState([]); // Store the original list of all courses
   const [loading, setLoading] = useState(true);
+  const { search, setSearch } = useContext(UserMemberContext);
 
   useEffect(() => {
     getallCourses();
   }, []);
 
+  useEffect(() => {
+    filterCourses();
+  }, [search]);
   // Fetch Course List
   const getallCourses = async () => {
     setLoading(true);
     const res = await getAllCourses();
     setCourseList(res?.courseLists || []); // Handling case where res.courseLists might be undefined
+    setAllCourses(courseList);
     setLoading(false);
+  };
+
+  const filterCourses = async () => {
+    let tempFilterCourses = [...courseList];
+    if (search) {
+      tempFilterCourses = tempFilterCourses.filter((curElem) => {
+        return curElem.name.toLowerCase().includes(search);
+      });
+      setCourseList(tempFilterCourses);
+    } else {
+      setCourseList(allCourses); // Reset to original list if search is empty
+    }
   };
 
   return (
