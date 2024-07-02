@@ -15,6 +15,7 @@ import { UserMemberContext } from "@/app/_context/UserMemberContext";
 const CourseList = () => {
   const [courseList, setCourseList] = useState([]);
   const [allCourses, setAllCourses] = useState([]); // Store the original list of all courses
+  const [filter, setFilter] = useState("all"); // State for the selected filter option
   const [loading, setLoading] = useState(true);
   const { search, setSearch } = useContext(UserMemberContext);
 
@@ -24,18 +25,18 @@ const CourseList = () => {
 
   useEffect(() => {
     filterCourses();
-  }, [search]);
+  }, [search, filter]);
   // Fetch Course List
   const getallCourses = async () => {
     setLoading(true);
     const res = await getAllCourses();
     setCourseList(res?.courseLists || []); // Handling case where res.courseLists might be undefined
-    setAllCourses(courseList);
+    setAllCourses(res?.courseLists || []);
     setLoading(false);
   };
 
   const filterCourses = async () => {
-    let tempFilterCourses = [...courseList];
+    let tempFilterCourses = [...allCourses];
     if (search) {
       tempFilterCourses = tempFilterCourses.filter((curElem) => {
         return curElem.name.toLowerCase().includes(search);
@@ -44,6 +45,17 @@ const CourseList = () => {
     } else {
       setCourseList(allCourses); // Reset to original list if search is empty
     }
+
+    // based on DropDown : Free or Paid
+    if (filter === "free") {
+      tempFilterCourses = tempFilterCourses.filter((course) => course?.free);
+      setCourseList(tempFilterCourses);
+    } else if (filter === "paid") {
+      tempFilterCourses = tempFilterCourses.filter((course) => !course?.free);
+      setCourseList(tempFilterCourses);
+    } else if (filter === "all") {
+      setCourseList(allCourses);
+    }
   };
 
   return (
@@ -51,7 +63,7 @@ const CourseList = () => {
       {/* Title and Filter */}
       <div className="flex items-center justify-between">
         <h2 className="text-[20px] font-bold text-primary">All Courses</h2>
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
@@ -60,7 +72,16 @@ const CourseList = () => {
             <SelectItem value="paid">Paid</SelectItem>
             <SelectItem value="free">Free</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="px-12 py-1 border-[1.7px] rounded-2xl hover:border-primary hover:border-2"
+        >
+          <option value="all">All</option>
+          <option value="paid">Paid</option>
+          <option value="free">Free</option>
+        </select>
       </div>
 
       {/* Display Course List */}
