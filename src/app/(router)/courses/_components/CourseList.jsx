@@ -15,7 +15,7 @@ import { UserMemberContext } from "@/app/_context/UserMemberContext";
 const CourseList = () => {
   const [courseList, setCourseList] = useState([]);
   const [allCourses, setAllCourses] = useState([]); // Store the original list of all courses
-  const [filter, setFilter] = useState("all"); // State for the selected filter option
+  const [filter, setFilter] = useState(""); // State for the selected filter option
   const [loading, setLoading] = useState(true);
   const { search, setSearch } = useContext(UserMemberContext);
 
@@ -25,7 +25,7 @@ const CourseList = () => {
 
   useEffect(() => {
     filterCourses();
-  }, [search, filter]);
+  }, [search || filter]);
   // Fetch Course List
   const getallCourses = async () => {
     setLoading(true);
