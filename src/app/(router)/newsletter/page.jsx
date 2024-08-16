@@ -8,7 +8,7 @@ const NewsLetter = () => {
   const [newsLetters, setNewsLetters] = useState([]);
   const [hasSubscribed, setHasSubscribed] = useState(false);
 
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
 
   useEffect(() => {
     CheckIfUserSubscribed();
@@ -103,7 +103,7 @@ const NewsLetter = () => {
           <p className="text-center text-lg font-medium">
             Subscribe to our Newsletter
           </p>
-          {hasSubscribed ? (
+          {isSignedIn && hasSubscribed ? (
             <button
               onClick={() => UpdateSubscribeRole(false)}
               //type="submit"
@@ -124,7 +124,7 @@ const NewsLetter = () => {
       </div>
 
       {/* TODO: add a condition here if user has subscribed the show List of newsLetters else null {hasSubs: <></>: null} */}
-      {hasSubscribed ? (
+      {isSignedIn && hasSubscribed ? (
         <div className="mt-3">
           <h3 className="text-[20px] text-primary font-bold">NewsLetters</h3>
           {/* List of Newsletters */}
