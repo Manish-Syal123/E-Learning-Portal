@@ -324,8 +324,12 @@ const SubscribeToNewsletter = async (email, firstName) => {
   }
 }
 `;
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
 const getNewsLetters = async () => {

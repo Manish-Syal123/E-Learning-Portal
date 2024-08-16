@@ -65,7 +65,15 @@ const SideNav = () => {
   ];
   return (
     <div className="p-5 bg-white shadow-sm border h-screen">
-      <Image src="/logo1.png" alt="Logo" width={195} height={200} />
+      <Link href="/">
+        <Image
+          src="/logo1.png"
+          alt="Logo"
+          width={195}
+          height={200}
+          className="cursor-pointer"
+        />
+      </Link>
       <hr className="mt-7" />
       {/* Menu List */}
       <div className="mt-8">

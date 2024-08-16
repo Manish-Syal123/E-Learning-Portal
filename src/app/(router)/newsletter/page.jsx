@@ -34,7 +34,7 @@ const NewsLetter = () => {
     const hasCalledAddUserInfo = localStorage.getItem("hasCalledAddUserInfo");
     if (!hasCalledAddUserInfo) {
       addUserInfo();
-      AsyncLocalStorage.setItem("hasCalledAddUserInfo", "true");
+      localStorage.setItem("hasCalledAddUserInfo", "true");
     }
   };
 
