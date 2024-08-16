@@ -1,10 +1,11 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { Suspense, useContext, useEffect } from "react";
 import SideNav from "./_components/SideNav";
 import Header from "./_components/Header";
 import { useUser } from "@clerk/nextjs";
 import GlobalApi from "../_utils/GlobalApi";
 import { UserMemberContext } from "../_context/UserMemberContext";
+import Loading from "./loading";
 
 const layout = ({ children }) => {
   const { user } = useUser();
@@ -37,13 +38,15 @@ const layout = ({ children }) => {
 
   return (
     <div>
-      <div className="sm:w-64 hidden md:block fixed">
-        <SideNav />
-      </div>
-      <div className="md:ml-64">
-        <Header />
-        {children}
-      </div>
+      <Suspense fallback={<Loading />}>
+        <div className="sm:w-64 hidden md:block fixed">
+          <SideNav />
+        </div>
+        <div className="md:ml-64">
+          <Header />
+          {children}
+        </div>
+      </Suspense>
     </div>
   );
 };
